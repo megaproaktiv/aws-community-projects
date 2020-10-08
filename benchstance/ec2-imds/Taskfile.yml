@@ -1,0 +1,17 @@
+# https://taskfile.dev
+
+# Build Task file for creating cross os binaries for ec2-imds
+# https://github.com/SWITCHCo/ec2-imds
+
+version: '2'
+
+vars:
+  FILE: ec2-imds.go
+
+tasks:
+  build:
+    cmds:
+      - GOOS=linux GOARCH=amd64 go build  -o dist/ec2-imds-linux  {{.FILE}}
+      - GOOS=windows GOARCH=amd64 go build -o dist/ec2-imds-windows  {{.FILE}} 
+      - GOOS=linux GOARCH=arm64 go build -o dist/ec2-imds-linux-arm {{.FILE}} 
+    silent: true

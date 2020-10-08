@@ -1,0 +1,14 @@
+sequenceDiagram
+    participant S as Stack
+    participant I as Instances   
+    participant B as Bucket
+    S ->>I: Creates
+    I ->>+I: load apps
+    I ->>-I: perform benchmark
+    I ->>B: save benchmark
+    I ->>-I: Stop
+    Alice->>+John: Hello John, how are you?
+    Alice->>+John: John, can you hear me?
+    John-->>-Alice: Hi Alice, I can hear you!
+    John-->>-Alice: I feel great!
+            
