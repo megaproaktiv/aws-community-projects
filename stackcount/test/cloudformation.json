@@ -1,0 +1,99 @@
+{
+    "Stacks": [
+        {
+            "StackId": "arn:aws:cloudformation:eu-central-1:012345678912:stack/AwsTestJenkinsStack/1ff02980-1d0f-11eb-91c3-0a7e60142948",
+            "StackName": "AwsTestJenkinsStack",
+            "ChangeSetId": "arn:aws:cloudformation:eu-central-1:012345678912:changeSet/CDK-f12a9a09-ddf0-4752-9b13-07007a568895/d8c6f7f6-91e8-4a98-9929-a9556f210597",
+            "Parameters": [
+                {
+                    "ParameterKey": "SsmParameterValueawsserviceamiamazonlinuxlatestamzn2amihvmx8664gp2C96584B6F00A464EAD1953AFF4B05118Parameter",
+                    "ParameterValue": "/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2",
+                    "ResolvedValue": "ami-00a205cb8e06c3c4e"
+                }
+            ],
+            "CreationTime": "2020-11-02T13:27:16.707000+00:00",
+            "LastUpdatedTime": "2020-11-02T13:27:22.282000+00:00",
+            "RollbackConfiguration": {},
+            "StackStatus": "CREATE_COMPLETE",
+            "DisableRollback": false,
+            "NotificationARNs": [],
+            "Capabilities": [
+                "CAPABILITY_IAM",
+                "CAPABILITY_NAMED_IAM",
+                "CAPABILITY_AUTO_EXPAND"
+            ],
+            "Outputs": [
+                {
+                    "OutputKey": "ExportsOutputRefJenkinsServer4D09C9AB",
+                    "OutputValue": "i-064ae38402586ef7b",
+                    "ExportName": "AwsTestJenkinsStack:ExportsOutputRefJenkinsServer4D09C9AB"
+                },
+                {
+                    "OutputKey": "jenkins",
+                    "OutputValue": "10.0.37.148",
+                    "Description": "jenkins internal ip"
+                },
+                {
+                    "OutputKey": "JenkinsServerSG",
+                    "OutputValue": "sg-0600017c196f000d1"
+                }
+            ],
+            "Tags": [],
+            "DriftInformation": {
+                "StackDriftStatus": "NOT_CHECKED"
+            }
+        },
+        {
+            "StackId": "arn:aws:cloudformation:eu-central-1:012345678912:stack/S3EncryptStack/db087440-1c5e-11eb-8df5-063f4b6787b2",
+            "StackName": "S3EncryptStack",
+            "Parameters": [
+                {
+                    "ParameterKey": "AssetParametersdd0967ce1407edae6a5e0462004da225d31287f39f9b23fd8c42ad487737d0bfS3VersionKey05472910",
+                    "ParameterValue": "assets/||dd0967ce1407edae6a5e0462004da225d31287f39f9b23fd8c42ad487737d0bf.zip"
+                },
+                {
+                    "ParameterKey": "AssetParametersdd0967ce1407edae6a5e0462004da225d31287f39f9b23fd8c42ad487737d0bfS3BucketEE9C2A36",
+                    "ParameterValue": "cdktoolkit-stagingbucket-vvch7n3y2xqp"
+                },
+                {
+                    "ParameterKey": "AssetParametersdd0967ce1407edae6a5e0462004da225d31287f39f9b23fd8c42ad487737d0bfArtifactHashB7A347D3",
+                    "ParameterValue": "dd0967ce1407edae6a5e0462004da225d31287f39f9b23fd8c42ad487737d0bf"
+                }
+            ],
+            "CreationTime": "2020-11-01T16:25:29.464000+00:00",
+            "DeletionTime": "2020-11-01T21:26:53.610000+00:00",
+            "LastUpdatedTime": "2020-11-01T16:25:35.140000+00:00",
+            "RollbackConfiguration": {},
+            "StackStatus": "DELETE_FAILED",
+            "StackStatusReason": "The following resource(s) failed to delete: [bucketKMSManaged09A0898D, bucketS3Managed1A7E0D67]. ",
+            "DisableRollback": false,
+            "NotificationARNs": [],
+            "Capabilities": [
+                "CAPABILITY_IAM",
+                "CAPABILITY_NAMED_IAM",
+                "CAPABILITY_AUTO_EXPAND"
+            ],
+            "Outputs": [
+                {
+                    "OutputKey": "OutbucketS3Managed",
+                    "OutputValue": "s3encryptstack-buckets3managed1a7e0d67-1d763lz4wxi53",
+                    "ExportName": "BUCKETS"
+                },
+                {
+                    "OutputKey": "OutbucketKMSManaged",
+                    "OutputValue": "s3encryptstack-bucketkmsmanaged09a0898d-tv0zpfh5suzz",
+                    "ExportName": "BUCKETKM"
+                },
+                {
+                    "OutputKey": "OutbucketUnencrypted",
+                    "OutputValue": "s3encryptstack-bucketunencrypteda7cba8d8-g5vifuiz94ku",
+                    "ExportName": "BUCKETU"
+                }
+            ],
+            "Tags": [],
+            "DriftInformation": {
+                "StackDriftStatus": "NOT_CHECKED"
+            }
+        }
+    ]
+} 

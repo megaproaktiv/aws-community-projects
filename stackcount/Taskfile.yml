@@ -1,0 +1,24 @@
+# https://taskfile.dev
+
+version: '3'
+
+vars:
+  GREETING: Hello, World!
+
+tasks:
+  build-linux:
+    desc: "Building go for linux"
+    cmds:
+      - env GOOS=linux go build -ldflags="-s -w" -o dist/main main/main.go
+    silent: true
+
+  build:
+    desc: "Building go"
+    cmds:
+      - go build -ldflags="-s -w" -o dist/main main/main.go
+    silent: true
+
+  test:
+    desc: go unit tests
+    cmds:
+      - go test
