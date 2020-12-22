@@ -1,0 +1,15 @@
+classDiagram
+    CounterInterface <|-- CloudformationClient : implements
+    CounterInterface <|-- CounterInterfaceMock : implements
+
+    class  CounterInterface{
+        +DescribeStacks(ctx, params, optFunc...)
+    }
+
+    class CounterInterfaceMock{
+        +DescribeStacks(ctx, params, optFunc...)
+    }
+
+    class CloudformationClient{
+        +DescribeStacks(ctx, params, optFunc...)
+    }

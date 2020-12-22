@@ -14,7 +14,6 @@ import (
 // CounterInterface Interface for counting CloudFormation
 type CounterInterface interface {
 	DescribeStacks(ctx context.Context, params *cloudformation.DescribeStacksInput, optFns ...func(*cloudformation.Options)) (*cloudformation.DescribeStacksOutput, error)
-
 }
 
 // Count counts the number of Stacks in the current account
@@ -25,3 +24,5 @@ func Count(client CounterInterface) (int){
 	count := len(resp.Stacks)
 	return count
 }
+
+
