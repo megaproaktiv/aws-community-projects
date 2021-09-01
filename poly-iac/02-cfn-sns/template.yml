@@ -1,0 +1,8 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: SNS
+Resources:
+  CfnTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      DisplayName: CFN generated topic
+      TopicName: cfntopic

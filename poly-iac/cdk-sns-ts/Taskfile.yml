@@ -1,0 +1,31 @@
+# https://taskfile.dev
+
+version: '3'
+
+vars:
+  GREETING: Hello, World!
+  VERSION: v2.0.0-rc.19
+
+
+tasks:
+  init:
+    desc: Init
+    cmds:
+      - npx cdk@{{.VERSION}}init app --language=typescript
+  pre_build:
+    desc: pre_build
+  build:
+    desc: build    
+      - time npm run build
+  diff:
+    desc: diff
+  deploy:
+    desc: deploy  
+    cmds:
+      - npx cdk@{{.VERSION}} deploy      
+  show:
+    desc: show  
+  remove:
+    desc: remove  
+    cmds: 
+      - npx cdk@{{.VERSION}} destroy

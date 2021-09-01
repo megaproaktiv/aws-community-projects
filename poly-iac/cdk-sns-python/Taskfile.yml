@@ -1,0 +1,34 @@
+# https://taskfile.dev
+
+version: '3'
+
+vars:
+  VERSION: v2.0.0-rc.19
+
+tasks:
+  init:
+    desc: Init
+    cmds:
+      - npx cdk@{{.VERSION}} init app --language python
+      - echo "Please run source .venv/bin/activate"
+      - echo "pleaser run pip install -r requirements.txt"
+  pre_build:
+    desc: pre_build
+  build:
+    desc: build    
+  diff:
+    desc: diff
+    cmds:
+      - npx cdk@{{.VERSION}} diff
+  deploy:
+    desc: deploy
+    cmds:
+      - npx cdk@{{.VERSION}} deploy  
+  show:
+    desc: show  
+    cmds: 
+      - cdkstat
+  remove:
+    desc: remove  
+    cmds: 
+      - npx cdk@{{.VERSION}} destroy -f

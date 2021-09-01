@@ -1,0 +1,22 @@
+# https://taskfile.dev
+
+version: '3'
+
+vars:
+  GREETING: Hello, World!
+
+tasks:
+  init:
+    desc: Init
+  pre_build:
+    desc: pre_build
+  build:
+    desc: build    
+  diff:
+    desc: diff
+  deploy:
+    desc: deploy  
+  show:
+    desc: show  
+  remove:
+    desc: remove  

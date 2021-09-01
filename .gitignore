@@ -8,3 +8,6 @@ migration-sizing/labkey.pem
 migration-sizing/log/cfd.log
 search-s3/go/.main.go.swp
 search-s3/node/npm-cache
+poly-iac/cdktf-reverse/.terraform
+poly-iac/cdktf-reverse/.terraform.lock.hcl
+poly-iac/cdktf-sns-python/.venv

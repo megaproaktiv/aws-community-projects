@@ -1,0 +1,37 @@
+# https://taskfile.dev
+
+version: '3'
+
+vars:
+  STACK: cfn-sns
+  TEMPLATE: template.yml
+  REGION: eu-central-1
+
+tasks:
+  init:
+    desc: Init
+    cmds:
+      - pip3 install cfn-lint
+      - pip3 install taskcat
+      - npm i cfn-tail
+  pre_build:
+    desc: pre_build
+    cmds:
+     - cfn-lint -t  {{.TEMPLATE}}
+  build:
+    desc: build
+  diff:
+    desc: diff
+  deploy:
+    desc: deploy  
+    cmds: 
+      - aws cloudformation create-stack --stack-name {{.STACK}}  --template-body file://{{.TEMPLATE}} --capabilities CAPABILITY_AUTO_EXPAND CAPABILITY_IAM   --region {{.REGION}}
+      - cfn-tail {{.STACK}} --region {{.REGION}}
+  show:
+    desc: show
+    cmds:
+      - cdkstat {{.STACK}}    
+  remove:
+    desc: remove  
+    cmds:
+      - aws cloudformation delete-stack --stack-name {{.STACK}} --region eu-central-1
