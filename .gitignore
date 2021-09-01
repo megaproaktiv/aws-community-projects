@@ -11,3 +11,4 @@ search-s3/node/npm-cache
 poly-iac/cdktf-reverse/.terraform
 poly-iac/cdktf-reverse/.terraform.lock.hcl
 poly-iac/cdktf-sns-python/.venv
+poly-iac/cdk-sns-go-main/dist
