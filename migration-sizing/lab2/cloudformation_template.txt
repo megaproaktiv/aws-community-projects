@@ -1,0 +1,44 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: >-
+  IAM template for the AWS Migration Immersion Day. ADS Module. Also, you are solely
+  responsible for complying with the license terms for the software downloaded
+  and installed by this template. By creating a stack from this template, you
+  are agreeing to such terms.
+Parameters:
+  AWSAccessKey:
+    Description: Access key for our lab user.
+    Type: String
+  AWSSecretAccessKey:
+    Description: Secret access key for our lab user.
+    Type: String
+  KeyName:
+    Type: AWS::EC2::KeyPair::KeyName
+    Description: Keyname for the keypair the lab will use to launch EC2 instances
+  LabUrlPrefix:
+    Type: String
+    Default: 'http://us-west-2-tcprod.s3.amazonaws.com/courses/ILT-TF-100-DODEVA/v3.3.7'
+  LabName:
+    Type: String
+    Default: lab-3-dynamodb
+  AWSAmiId:
+    Description: The name of the Windows AMI to find based on search
+    Type: String
+    Description: 'x86_64,Windows_Server-2012-R2_RTM-English-64Bit-Base'
+    Default: 'ami-06032c95ea1ffa069'  
+Resources:
+  migrationhubdiscovery:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - migrationhub.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      ManagedPolicyArns:
+        - 'arn:aws:iam::aws:policy/service-role/AWSMigrationHubDiscoveryAccess'
+      RoleName: migrationhub-discovery
+  

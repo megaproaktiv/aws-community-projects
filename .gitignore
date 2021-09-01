@@ -6,3 +6,5 @@ search-s3/python/pyvenv.cfg
 migration-sizing/credentials.txt
 migration-sizing/labkey.pem
 migration-sizing/log/cfd.log
+search-s3/go/.main.go.swp
+search-s3/node/npm-cache
