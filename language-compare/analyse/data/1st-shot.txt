@@ -1,0 +1,18 @@
+Code:  200 Result:  START RequestId: a5c93795-5c22-4035-8e53-19f05230aee9 Version: $LATEST
+END RequestId: a5c93795-5c22-4035-8e53-19f05230aee9
+REPORT RequestId: a5c93795-5c22-4035-8e53-19f05230aee9	Duration: 40.55 ms	Billed Duration: 41 ms	Memory Size: 1024 MB	Max Memory Used: 81 MB	Init Duration: 410.71 ms
+
+compare-py
+Code:  200 Result:  START RequestId: 284648bf-dff0-4753-8bed-a3b4e5bf4851 Version: $LATEST
+END RequestId: 284648bf-dff0-4753-8bed-a3b4e5bf4851
+REPORT RequestId: 284648bf-dff0-4753-8bed-a3b4e5bf4851	Duration: 491.72 ms	Billed Duration: 492 ms	Memory Size: 1024 MB	Max Memory Used: 37 MB	Init Duration: 129.19 ms
+
+compare-node
+Code:  200 Result:  START RequestId: 1c390da5-82bf-42cb-9a22-e05e1e46c4c7 Version: $LATEST
+END RequestId: 1c390da5-82bf-42cb-9a22-e05e1e46c4c7
+REPORT RequestId: 1c390da5-82bf-42cb-9a22-e05e1e46c4c7	Duration: 346.45 ms	Billed Duration: 347 ms	Memory Size: 128 MB	Max Memory Used: 59 MB	Init Duration: 159.23 ms
+
+compare-go
+Code:  200 Result:  START RequestId: 21611bd2-4cf8-4555-9850-bb89729fb636 Version: $LATEST
+END RequestId: 21611bd2-4cf8-4555-9850-bb89729fb636
+REPORT RequestId: 21611bd2-4cf8-4555-9850-bb89729fb636	Duration: 5.01 ms	Billed Duration: 6 ms	Memory Size: 1024 MB	Max Memory Used: 29 MB	Init Duration: 71.77 ms

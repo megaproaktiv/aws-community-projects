@@ -1,0 +1,41 @@
+# https://taskfile.dev
+
+version: '3'
+
+includes:
+  go:
+    taskfile: ./lambda/go/Taskfile.yml
+    dir: ./lambda/go
+
+vars:
+  cdk: cdk@v2.0.0
+
+tasks:
+  build:
+    desc: 1 - build go app
+    dir: lambda/go
+    cmds:
+      - task: go:build
+    silent: true
+
+  deploy:
+    desc: 2 - Deploy Infra&App
+    dir: ./infra
+    cmds:
+      - echo "CDK 2 must be installed"  
+      - npx {{.cdk}} deploy --require-approval never  
+
+  call:
+    desc: 3 - Call each lambda
+    dir: ./analyse
+    cmds:
+      - go run main/main.go >./data/benchmark.csv
+      - less ./data/benchmark.csv
+      - open analyse/fibcompare.png
+       
+  destroy:
+    desc: 4 - Destroy Infra    
+    dir: ./infra
+    cmds:
+      - echo "CDK 2 must be installed"  
+      - npx {{.cdk}} destroy -f
