@@ -1,0 +1,1 @@
+Vulnerable package json inspired by: https://github.com/Traxiom/traxiom-npm-test
