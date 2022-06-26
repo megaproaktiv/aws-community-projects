@@ -1,0 +1,21 @@
+# https://taskfile.dev
+
+version: '3'
+
+vars:
+  RULES: LambdaRuntime.rule
+
+tasks:
+  test-pass:
+    desc: Check rules against pass.json
+    cmds:
+      - cfn-guard validate --data  pass.json --rules {{.RULES}}
+      - echo "{{.GREETING}}"
+    silent: true
+
+  test-fail:
+    desc: Check rules against fail.json
+    cmds:
+      - cfn-guard validate --data  fail.json --rules {{.RULES}}
+      - echo "{{.GREETING}}"
+    silent: true

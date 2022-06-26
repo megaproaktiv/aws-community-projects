@@ -1,0 +1,6 @@
+rule lambdaruntimenewest when
+    resourceType == "AWS::Lambda::Function" {
+     WHEN configuration.runtime !EMPTY {
+    configuration.runtime IN ['python3.9','go1.x','nodejs16.x']
+    }
+}
