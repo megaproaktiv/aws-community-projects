@@ -12,3 +12,15 @@ poly-iac/cdktf-reverse/.terraform
 poly-iac/cdktf-reverse/.terraform.lock.hcl
 poly-iac/cdktf-sns-python/.venv
 poly-iac/cdk-sns-go-main/dist
+.DS_Store
+.vscode
+language-compare/analyse/.RData
+language-compare/analyse/.Rhistory
+*.Rproj
+language-compare/analyse/fibcompare.png
+lambda-inspector/app/java/target
+lambda-inspector/app/node/node_modules
+lambda-testevents/.terraform
+.terraform*
+lambda-testevents/terraform.tfstate
+lambda-testevents/terraform.tfstate.backup
