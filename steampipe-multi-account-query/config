@@ -1,0 +1,26 @@
+[profile megaproaktiv_dev]
+sso_start_url=https://${ssoid}.awsapps.com/start/
+sso_region=eu-west-1
+sso_account_name=megaproaktiv_dev
+sso_account_id=${account1}
+sso_role_name=AWSPowerUserAccess
+credential_process=aws-sso-util credential-process --profile  megaproaktiv_dev
+sso_auto_populated=true
+
+[profile megaproaktiv_test]
+sso_start_url=https://${ssoid}.awsapps.com/start/
+sso_region=eu-west-1
+sso_account_name=megaproaktiv_test
+sso_account_id=${account2}
+sso_role_name=AWSPowerUserAccess
+credential_process=aws-sso-util credential-process --profile  megaproaktiv_test
+sso_auto_populated=true
+
+[profile megaproaktiv_prod]
+sso_start_url=https://${ssoid}.awsapps.com/start/
+sso_region=eu-west-1
+sso_account_name=megaproaktiv_prod
+sso_account_id=${account2}
+sso_role_name=AWSPowerUserAccess
+credential_process=aws-sso-util credential-process --profile  megaproaktiv_prod
+sso_auto_populated=true
