@@ -40,6 +40,11 @@ name          = "_${local.lambda_function_name}-schema"
         "value": {
           "key1": "value2"
         }
+      },
+      "Parameter3": {
+        "value": {
+          "key1": "value3"
+        }
       }
     }
   }

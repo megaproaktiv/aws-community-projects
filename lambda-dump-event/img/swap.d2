@@ -1,0 +1,27 @@
+direction: right
+original: original {
+  shape: image
+  icon: https://icons.terrastruct.com/aws%2FCompute%2FAWS-Lambda_Lambda-Function_light-bg.svg
+}
+
+cuckoo: cuckoo {
+  shape: image
+  icon: https://icons.terrastruct.com/aws%2FInternet%20of%20Things%2FIoT_Lambda-function_light-bg.svg
+  }
+
+original <-> cuckoo: swap
+
+event: event {
+  shape: person
+
+}
+
+event -> original: errorevent
+event -> cuckoo: errorevent
+
+logs: logs {
+  shape: image
+  icon: https://icons.terrastruct.com/aws%2FManagement%20&%20Governance%2FAmazon-CloudWatch_light-bg.svg
+}
+
+cuckoo -> logs: log
