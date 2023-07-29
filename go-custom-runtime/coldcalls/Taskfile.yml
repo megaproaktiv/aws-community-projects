@@ -1,0 +1,13 @@
+# https://taskfile.dev
+
+version: '3'
+
+vars:
+  GREETING: Hello, World!
+
+tasks:
+  run:
+    desc: Run with function parameters
+    cmds:
+      - go run main.go --lambda hello-node --times 10 --memory "128,1024"
+    silent: false
