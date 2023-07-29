@@ -9,7 +9,7 @@ import (
 	"strconv"
 	"strings"
 	"time"
-
+	"coldcalls"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/lambda"
@@ -57,6 +57,9 @@ func main() {
 		}
 		memories = append(memories, mem)
 	}
+
+	// Clear All logs
+	coldcalls.ClearLogs(lambdaName)
 
 	// Loop over all memory parameters and invoke the Lambda function
 	for _, memory := range memories {

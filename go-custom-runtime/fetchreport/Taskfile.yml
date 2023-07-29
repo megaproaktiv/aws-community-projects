@@ -4,15 +4,14 @@ version: '3'
 
 vars:
   DIST: ../dist
-  APP: coldcalls
+  APP: fetchreport
 
 tasks:
   run:
-    desc: Run with function parameters
+    desc: demo run
     cmds:
-      - go run main/main.go --lambda hello-node --times 10 --memory "128,1024"
-    silent: false
-    
+      - go run main/main.go --lambda hello-node
+
   build:
     desc: Build
     cmds:
