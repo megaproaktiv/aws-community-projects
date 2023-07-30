@@ -10,18 +10,7 @@ vars:
   EC2: BenchstanceStack
 
 tasks:
-  build:
-    desc: Build js files
-    sources:
-      - lib/benchstance-stack.ts
-      - bin/benchstance.ts
-    generates:
-      - lib/benchstance-stack.js
-      - lib/benchstance-stack.d.ts
-      - bin/benchstance.d.ts
-      - bin/benchstance.js
-    cmds:
-      - npm run build
+
 
   test:
     desc: run test

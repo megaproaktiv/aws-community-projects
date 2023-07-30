@@ -1,39 +1,29 @@
-import { BucketDeployment } from '@aws-cdk/aws-s3-deployment/lib/bucket-deployment';
-import { CfnOutput, Duration, RemovalPolicy, Tags } from '@aws-cdk/core';
-import * as cdk from '@aws-cdk/core';
-import { Action, Instance, InstanceClass, InstanceSize, InstanceType, Peer, Port, SecurityGroup, SubnetType, UserData, Vpc } from '@aws-cdk/aws-ec2';
-import { AmazonLinuxCpuType, AmazonLinuxEdition, AmazonLinuxGeneration, AmazonLinuxImage } from '@aws-cdk/aws-ec2';
-import { Bucket } from '@aws-cdk/aws-s3';
-import { Source } from '@aws-cdk/aws-s3-deployment';
+import { aws_s3 as aws_s3, CfnOutput, RemovalPolicy, Stack, StackProps } from 'aws-cdk-lib';               // stable module
+import { aws_s3_deployment as aws_s3_deployment } from 'aws-cdk-lib';               // stable module
+import { aws_ec2 as aws_ec2 } from 'aws-cdk-lib';               // stable module
+import { aws_iam as aws_iam } from 'aws-cdk-lib';               // stable module
+import { Construct } from 'constructs';
 
-// ** additional CDK imports
-import { DestroyableBucket } from 'destroyable-bucket'
-import { SelfDestruct } from 'cdk-time-bomb';
 
 // ** local imports
 import { BenchstanceVPCStack } from '../lib/benchstance-vpc-stack';
 
 // *** Non cdk imports
-import { GetLocalIp } from './getip'
 import * as path from 'path'
 import { readFileSync } from 'fs';
-import { Effect, PolicyStatement } from '@aws-cdk/aws-iam';
 
 
-export class BenchstanceStack extends cdk.Stack {
-  constructor(scope: cdk.Construct, id: string, vpcstack: BenchstanceVPCStack, props?: cdk.StackProps) {
+export class BenchstanceStack extends Stack {
+  constructor(scope: Construct, id: string, vpcstack: BenchstanceVPCStack, props?: StackProps) {
     super(scope, id, props);
     const userDataFile = 'bootstrap/userdata.sh'
 
-    const selfDestruct = new SelfDestruct(this, "selfDestructor", {
-      timeToLive: Duration.minutes(15)
-    });
-
+    
     const testVpc = vpcstack.vpc;
     const sg = vpcstack.sg;
 
     // The bucket for output data
-    const benchData = new Bucket(this, "BenchData", {
+    const benchData = new aws_s3.Bucket(this, "BenchData", {
       removalPolicy: RemovalPolicy.RETAIN
     });
     new CfnOutput(this, "dataBucket",
@@ -41,30 +31,27 @@ export class BenchstanceStack extends cdk.Stack {
         value: benchData.bucketName,
         exportName: "benchdata"
       })
-
-    // Deployment bucket for assets
-    const benchDeployment = new DestroyableBucket(this, "BenchDeployment", {
-      publicReadAccess: false,
-      removalPolicy: RemovalPolicy.DESTROY
+    const benchdeploy = new aws_s3.Bucket(this, "benchdeploy", {
+      removalPolicy: RemovalPolicy.RETAIN
     });
-    new CfnOutput(this, "deploymentBucket",
+    new CfnOutput(this, "benchDeployment-out",
       {
-        value: benchData.bucketName,
+        value: benchdeploy.bucketName,
         exportName: "benchdeploy"
       })
 
+    
     // Copy assets
-    const deployment = new BucketDeployment(this, 'DeployMe', {
-      sources: [Source.asset(path.join(__dirname, '../assets'))],
-      destinationBucket: benchDeployment,
+    const deployment = new aws_s3_deployment.BucketDeployment(this, 'DeployMe', {
+      sources: [aws_s3_deployment.Source.asset(path.join(__dirname, '../assets'))],
+      destinationBucket: benchdeploy,
       retainOnDelete: false, // default is true, which will block the integration test cleanup
     });
-    deployment.node.addDependency(benchDeployment);
 
     // Update userdata dynamic attributes
     var userdata = readFileSync(userDataFile, 'utf8').toString();
     userdata = userdata.replace(/BUCKET/g, benchData.bucketName);
-    userdata = userdata.replace(/DEPLOYMENT/g, benchDeployment.bucketName);
+    userdata = userdata.replace(/DEPLOYMENT/g, benchdeploy.bucketName);
     userdata = userdata.replace(/REGION/g, this.region);
 
     var userdataArm = userdata;
@@ -77,131 +64,80 @@ export class BenchstanceStack extends cdk.Stack {
     // *    Instances
     // *    Update ami and instance type
     // *    Update userdata for other os
-    var amiLinuxX86_64 = new AmazonLinuxImage({
-      cpuType: AmazonLinuxCpuType.X86_64,
-      edition: AmazonLinuxEdition.STANDARD,
-      generation: AmazonLinuxGeneration.AMAZON_LINUX_2
+    var amiLinuxX86_64 = new aws_ec2.AmazonLinuxImage({
+      cpuType: aws_ec2.AmazonLinuxCpuType.X86_64,
+      edition: aws_ec2.AmazonLinuxEdition.STANDARD,
+      generation: aws_ec2.AmazonLinuxGeneration.AMAZON_LINUX_2
     })
     // *
-    var instances: Instance[] = new Array<Instance>();
+    var instances: aws_ec2.Instance[] = new Array<aws_ec2.Instance>();
 
-    const testedInstanceC4 = new Instance(this, 'testedInstanceC4', {
-      instanceType: InstanceType.of(InstanceClass.COMPUTE4, InstanceSize.LARGE),
+    const instanceAMD001 = new aws_ec2.Instance(this, 'testedInstanceC4XL', {
+      instanceType: aws_ec2.InstanceType.of(aws_ec2.InstanceClass.C4, aws_ec2.InstanceSize.LARGE),
       machineImage: amiLinuxX86_64,
-      userData: UserData.custom(userdata),
+      userData: aws_ec2.UserData.custom(userdata),
       vpc: testVpc,
-      vpcSubnets: { subnetType: SubnetType.PUBLIC },
+      vpcSubnets: { subnetType: aws_ec2.SubnetType.PUBLIC },
       securityGroup: sg
     })
-    instances.push(testedInstanceC4);
+    instances.push(instanceAMD001);
 
-    const sametest = true;
-    if (sametest) {
+    const testedInstance002 = new aws_ec2.Instance(this, 'testedInstanceC5XL', {
+      instanceType: aws_ec2.InstanceType.of(aws_ec2.InstanceClass.C5, aws_ec2.InstanceSize.LARGE),
+      machineImage: amiLinuxX86_64,
+      userData: aws_ec2.UserData.custom(userdata),
+      vpc: testVpc,
+      vpcSubnets: { subnetType: aws_ec2.SubnetType.PUBLIC },
+      securityGroup: sg
+    })
+    instances.push(testedInstance002);
 
-      const testedInstanceC4XL = new Instance(this, 'testedInstanceC4XL', {
-        instanceType: InstanceType.of(InstanceClass.COMPUTE4, InstanceSize.XLARGE),
-        machineImage: amiLinuxX86_64,
-        userData: UserData.custom(userdata),
-        vpc: testVpc,
-        vpcSubnets: { subnetType: SubnetType.PUBLIC },
-        securityGroup: sg
-      })
-      instances.push(testedInstanceC4XL);
+    const testedInstanceC6i = new aws_ec2.Instance(this, 'testedInstanceC6iXL', {
+      instanceType: aws_ec2.InstanceType.of(aws_ec2.InstanceClass.C6I, aws_ec2.InstanceSize.LARGE),
+      machineImage: amiLinuxX86_64,
+      userData: aws_ec2.UserData.custom(userdata),
+      vpc: testVpc,
+      vpcSubnets: { subnetType: aws_ec2.SubnetType.PUBLIC },
+      securityGroup: sg
+    })
+    instances.push(testedInstanceC6i);
 
-      const testedInstanceC4XXL = new Instance(this, 'testedInstanceC4XXL', {
-        instanceType: InstanceType.of(InstanceClass.COMPUTE4, InstanceSize.XLARGE2),
-        machineImage: amiLinuxX86_64,
-        userData: UserData.custom(userdata),
-        vpc: testVpc,
-        vpcSubnets: { subnetType: SubnetType.PUBLIC },
-        securityGroup: sg
-      })
-      instances.push(testedInstanceC4XXL);
-    } else {
-      const testedInstanceC5 = new Instance(this, 'testedInstance', {
-        instanceType: InstanceType.of(InstanceClass.COMPUTE5, InstanceSize.LARGE),
-        machineImage: amiLinuxX86_64,
-        userData: UserData.custom(userdata),
-        vpc: testVpc,
-        vpcSubnets: { subnetType: SubnetType.PUBLIC },
-        securityGroup: sg
-      })
-      instances.push(testedInstanceC5);
 
-      const testedInstanceM5 = new Instance(this, 'testedInstancecm5', {
-        instanceType: InstanceType.of(InstanceClass.M5, InstanceSize.LARGE),
-        machineImage: amiLinuxX86_64,
-        userData: UserData.custom(userdata),
-        vpc: testVpc,
-        vpcSubnets: { subnetType: SubnetType.PUBLIC },
-        securityGroup: sg
-      })
-      instances.push(testedInstanceM5);
 
-      const testedInstanceM5a = new Instance(this, 'testedInstancecm5a', {
-        instanceType: InstanceType.of(InstanceClass.M5A, InstanceSize.LARGE),
-        machineImage: amiLinuxX86_64,
-        userData: UserData.custom(userdata),
-        vpc: testVpc,
-        vpcSubnets: { subnetType: SubnetType.PUBLIC },
-        securityGroup: sg
-      })
-      instances.push(testedInstanceM5a);
+    var amiLinuxG = new aws_ec2.AmazonLinuxImage({
+      cpuType: aws_ec2.AmazonLinuxCpuType.ARM_64,
+      edition: aws_ec2.AmazonLinuxEdition.STANDARD,
+      generation: aws_ec2.AmazonLinuxGeneration.AMAZON_LINUX_2
+    })
 
-      const testedInstanceT2 = new Instance(this, 'testedInstanceT2', {
-        instanceType: InstanceType.of(InstanceClass.T2, InstanceSize.LARGE),
-        machineImage: amiLinuxX86_64,
-        userData: UserData.custom(userdata),
-        vpc: testVpc,
-        vpcSubnets: { subnetType: SubnetType.PUBLIC },
-        securityGroup: sg
-      })
-      instances.push(testedInstanceT2);
+    const testedInstanceG01 = new aws_ec2.Instance(this, 'testedInstanceC6G', {
+      instanceType: aws_ec2.InstanceType.of(aws_ec2.InstanceClass.C6G, aws_ec2.InstanceSize.LARGE),
+      machineImage: amiLinuxG,
+      userData: aws_ec2.UserData.custom(userdataArm),
+      vpc: testVpc,
+      vpcSubnets: { subnetType: aws_ec2.SubnetType.PUBLIC },
+      securityGroup: sg
+    })
+    instances.push(testedInstanceG01);
 
-      const testedInstanceT3 = new Instance(this, 'testedInstanceT3', {
-        instanceType: InstanceType.of(InstanceClass.T3, InstanceSize.LARGE),
-        machineImage: amiLinuxX86_64,
-        userData: UserData.custom(userdata),
-        vpc: testVpc,
-        vpcSubnets: { subnetType: SubnetType.PUBLIC },
-        securityGroup: sg
-      })
-      instances.push(testedInstanceT3);
+    const testedInstanceG3_01 = new aws_ec2.Instance(this, 'C7g', {
+      instanceType: aws_ec2.InstanceType.of(aws_ec2.InstanceClass.C7G, aws_ec2.InstanceSize.LARGE),
+      machineImage: amiLinuxG,
+      userData: aws_ec2.UserData.custom(userdataArm),
+      vpc: testVpc,
+      vpcSubnets: { subnetType: aws_ec2.SubnetType.PUBLIC },
+      securityGroup: sg
+    })
+    instances.push(testedInstanceG3_01);
 
-      var amiLinuxG = new AmazonLinuxImage({
-        cpuType: AmazonLinuxCpuType.ARM_64,
-        edition: AmazonLinuxEdition.STANDARD,
-        generation: AmazonLinuxGeneration.AMAZON_LINUX_2
-      })
-
-      const testedInstanceM6G = new Instance(this, 'testedInstanceM6G', {
-        instanceType: InstanceType.of(InstanceClass.M6G, InstanceSize.LARGE),
-        machineImage: amiLinuxG,
-        userData: UserData.custom(userdataArm),
-        vpc: testVpc,
-        vpcSubnets: { subnetType: SubnetType.PUBLIC },
-        securityGroup: sg
-      })
-      instances.push(testedInstanceM6G);
-
-      const testedInstanceT4G = new Instance(this, 'testedInstanceT4G', {
-        instanceType: new InstanceType("t4g.large"),
-        machineImage: amiLinuxG,
-        userData: UserData.custom(userdataArm),
-        vpc: testVpc,
-        vpcSubnets: { subnetType: SubnetType.PUBLIC },
-        securityGroup: sg
-      })
-      instances.push(testedInstanceT4G);
-    }
     for (var index = 0; index < instances.length; index++) {
       let currentInstance = instances[index];
       // * Access rights for instance
       benchData.grantReadWrite(currentInstance);
-      benchDeployment.grantRead(currentInstance);
-      currentInstance.addToRolePolicy(new PolicyStatement(
+      benchdeploy.grantRead(currentInstance);
+      currentInstance.addToRolePolicy(new aws_iam.PolicyStatement(
         {
-          effect: Effect.ALLOW,
+          effect: aws_iam.Effect.ALLOW,
           resources: ["arn:aws:ec2:" + this.region + ":" + this.account + ":instance/*"],
           actions: ["ec2:StopInstances"]
         }
