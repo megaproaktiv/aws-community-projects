@@ -33,3 +33,5 @@ lambda-dump-event/img/swap.svg
 search-s3/go/count
 *.xlsx
 steampipe-multi-account-query/steampipe-mod-aws-compliance
+dist
+cdk.out
