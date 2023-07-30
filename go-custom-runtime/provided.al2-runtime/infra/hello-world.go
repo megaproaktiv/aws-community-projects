@@ -44,6 +44,8 @@ func NewHelloWorldStack(scope constructs.Construct, id string, props *HelloWorld
 			Code:         lambda.Code_FromAsset(&lambdaPath, &awss3assets.AssetOptions{}),
 			Handler:      aws.String("bootstrap"),
 			Runtime:      lambda.Runtime_PROVIDED_AL2(),
+			Architecture: lambda.Architecture_ARM_64(),
+			
 		})
 	//end lambda
 

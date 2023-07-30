@@ -13,7 +13,7 @@ tasks:
     desc: build go
     cmds:
       - go mod tidy
-      - env GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -tags lambda.norpc -ldflags="-s -w" -o ../dist/bootstrap main.go
+      - env GOOS=linux GOARCH=arm64 CGO_ENABLED=0 go build -tags lambda.norpc -ldflags="-s -w" -o ../dist/bootstrap main.go
       - chmod +x ../dist/bootstrap
       - cd ../dist && zip bootstrap.zip bootstrap
     sources:
