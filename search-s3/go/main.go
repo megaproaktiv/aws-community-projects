@@ -11,7 +11,7 @@ import (
 	"strings"
 )
 
-var counter = 1
+var counter = 0
 
 const bucket = "letsbuild-cli"
 

@@ -24,3 +24,12 @@ lambda-testevents/.terraform
 .terraform*
 lambda-testevents/terraform.tfstate
 lambda-testevents/terraform.tfstate.backup
+.Rproj.user
+.task
+lambda-dump-event/dist
+lambda-dump-event/code.zip
+lambda-dump-event/download.txt
+lambda-dump-event/img/swap.svg
+search-s3/go/count
+*.xlsx
+steampipe-multi-account-query/steampipe-mod-aws-compliance
