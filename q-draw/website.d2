@@ -1,0 +1,89 @@
+# Website Infrastructure for anders-nicht-falsch.de
+
+...@awsicons.d2
+
+# Users and Internet
+users: Users {
+  class: User
+}
+
+internet: Internet {
+  shape: cloud
+  style.fill: lightgray
+}
+
+# DNS Layer
+route53: Route53 {
+  class: Route53
+  tooltip: "DNS service routing traffic to CloudFront"
+}
+
+# CDN Layer
+cloudfront: CloudFront Distribution {
+  class: Cloudfront
+  tooltip: "Distribution ID: EXXXXXXXXXX\nDomain: dxxxxxxxxxxxxx.cloudfront.net\nAliases: anders-nicht-falsch.de, www.anders-nicht-falsch.de"
+}
+
+# SSL Certificate
+acm: ACM Certificate {
+  class: ACM
+  tooltip: "SSL Certificate for HTTPS\nARN: arn:aws:acm:us-east-1:xxxxxxxxxxxx:certificate/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+}
+
+# Origin Layer
+s3_bucket: S3 Bucket {
+  class: Bucket
+  tooltip: "Origin: www.anders-nicht-falsch.de.s3.eu-central-1.amazonaws.com\nRegion: eu-central-1"
+}
+
+# Origin Access Control
+oac: Origin Access Control {
+  shape: diamond
+  style.fill: lightgreen
+  tooltip: "OAC ID: EXXXXXXXXXXXXXX\nSecures S3 bucket access"
+}
+
+# Website Content
+website_files: Website Files {
+  class: Article
+  tooltip: "HTML, CSS, JS, Images"
+}
+
+# Configuration details (separate from image shapes)
+cloudfront_config: CloudFront Configuration {
+  shape: text
+  label: "HTTPS Only\nGlobal Distribution\nCompression Enabled\nIPv6 Enabled\nHTTP/2 & HTTP/3"
+}
+
+s3_config: S3 Configuration {
+  shape: text
+  label: "Region: eu-central-1\nPrivate Access (OAC)\nStatic Website Hosting"
+}
+
+route53_config: Route53 Configuration {
+  shape: text
+  label: "anders-nicht-falsch.de → CloudFront\nwww.anders-nicht-falsch.de → CloudFront"
+}
+
+# Connections with labels
+users -> internet: "HTTPS Request"
+internet -> route53: "DNS Query\nanders-nicht-falsch.de"
+route53 -> cloudfront: "DNS Response\ndxxxxxxxxxxxxx.cloudfront.net"
+internet -> cloudfront: "HTTPS Request\n(HTTP/2 & HTTP/3)"
+
+cloudfront -> acm: "SSL Termination"
+cloudfront -> oac: "Authenticated Request"
+oac -> s3_bucket: "Secure Access\n(eu-central-1)"
+s3_bucket -> website_files: "Serves Content"
+
+# Response flow
+website_files -> s3_bucket: "Content"
+s3_bucket -> oac: "Response"
+oac -> cloudfront: "Cached Response"
+cloudfront -> internet: "HTTPS Response\n(Compressed & Cached)"
+internet -> users: "Website Content"
+
+# Configuration connections (dotted lines to show relationships)
+cloudfront -- cloudfront_config: {style.stroke-dash: 3}
+s3_bucket -- s3_config: {style.stroke-dash: 3}
+route53 -- route53_config: {style.stroke-dash: 3}

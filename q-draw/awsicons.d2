@@ -1,0 +1,106 @@
+vars: {
+  icon: {
+    aws: "https://icons.terrastruct.com/aws%2F_Group%20Icons%2FAWS-Cloud-alt_light-bg.svg"
+    account: "https://icons.terrastruct.com/aws%2FManagement%20&%20Governance%2FAWS-Organizations_Account_light-bg.svg"
+    bucket: "https://icons.terrastruct.com/aws%2FStorage%2FAmazon-Simple-Storage-Service-S3_Bucket_light-bg.svg"
+    cloudfront: "https://icons.terrastruct.com/aws%2FNetworking%20&%20Content%20Delivery%2FAmazon-CloudFront.svg"
+    docker: "https://icons.terrastruct.com/dev%2Fdocker.svg"
+    dynamodb: "https://icons.terrastruct.com/aws%2FDatabase%2FAmazon-DynamoDB.svg"
+    region: "https://icons.terrastruct.com/aws%2F_Group%20Icons%2FAWS-Cloud_light-bg.svg"
+    route53: "https://icons.terrastruct.com/aws%2FNetworking%20&%20Content%20Delivery%2FAmazon-Route-53_light-bg.svg"
+    route53zone: "https://icons.terrastruct.com/aws%2FNetworking%20&%20Content%20Delivery%2FAmazon-Route-53_Hosted-Zone_light-bg.svg"
+    user: "https://icons.terrastruct.com/aws%2F_General%2FUser_light-bg.svg"
+    web: "https://icons.terrastruct.com/aws%2F_General%2FClient_light-bg.svg"
+    article: "./article_icon.svg"
+    acm: "./acm_icon.svg"
+  }
+}
+
+classes {
+  Root {
+    style: {
+      fill: white
+      stroke-width: 0
+    }
+  }
+
+
+  Bucket: {
+    shape: image
+    label: Bucket
+    icon: ${icon.bucket}
+  }
+
+
+
+  Cloud: {
+    icon: ${icon.aws}
+    icon.near: top-left
+    style: {
+      fill: white
+      stroke: black
+    }
+  }
+
+
+
+
+  End: {
+    shape: circle
+    label: End
+    style: {
+      fill: lightblue
+      border-radius: 16
+    }
+  }
+  Number: {
+    shape: circle
+    label: End
+    style: {
+      fill: red
+      border-radius: 16
+      font: mono
+      font-size: 42
+      font-color: white
+    }
+  }
+
+
+
+  User: {
+    shape: image
+    label: User
+    icon: ${icon.user}
+  }
+
+
+  Cloudfront: {
+    shape: image
+    label: Amazon CloudFront
+    icon: ${icon.cloudfront}
+  }
+
+  Zone: {
+    shape: image
+    label: R53 Zone
+    icon: ${icon.route53zone}
+  }
+  Route53: {
+    shape: image
+    label: R53
+    icon: ${icon.route53}
+  }
+
+  Article: {
+    shape: image
+    label: Website Files
+    icon: ${icon.article}
+  }
+
+  ACM: {
+    shape: image
+    label: ACM Certificate
+    icon: ${icon.acm}
+  }
+
+}
